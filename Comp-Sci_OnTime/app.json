@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Comp-Sci_OnTime",
-    "slug": "Comp-Sci_OnTime",
+    "name": "OnTime",
+    "slug": "OnTime",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
