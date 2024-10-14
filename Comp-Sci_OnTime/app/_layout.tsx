@@ -1,27 +1,15 @@
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { Slot } from 'expo-router';
 
-export default function App() {
+const RootLayout = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>zia is a big ronaldo fan and very helpul</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <>
+    <Slot />
+    </>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: "Ruge Boogie", 
-    
-  },
-});
+export default RootLayout
+
+const styles = StyleSheet.create({})
