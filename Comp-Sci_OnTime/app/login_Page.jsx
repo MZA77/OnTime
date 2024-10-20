@@ -3,6 +3,8 @@ import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import tw from 'twrnc';
 import { auth } from '../firebase'; // Adjust the path as necessary
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -20,16 +22,24 @@ const LoginPage = ({ navigation }) => {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Login Successful', 'You have successfully logged in.');
-      navigation.navigate('Home'); // navigattes to the Home screen
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Retrieve the username from Firestore
+      const db = getFirestore();
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const username = userDoc.data().username;
+
+
+      navigation.navigate('Home');
     } catch (error) {
-      Alert.alert('Login Failed', error.message); //if the login fails, an alert will pop up with the error message
-    } 
+      Alert.alert('Login Failed', error.message);
+    }
   };
 
   return (
-    <View style={tw`flex-1 justify-center items-center bg-gray-100`}>
+    <View style={tw`flex-1 justify-start items-center bg-gray-100`}>
+      <Text style={tw`text-4xl mt-25 mb-15 font-bold text-black`}>OnTime</Text>
       <View style={tw`bg-white p-5 rounded-lg shadow-lg w-80`}>
         <Text style={tw`text-center text-2xl text-gray-800 mb-5`}>Login</Text>
         {/* Email */}

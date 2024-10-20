@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
 });*/
 import { registerRootComponent } from 'expo';
 import React from 'react';
-import { View, Text } from 'react-native';
-import LoginPage from './login_Page';
 import AppNavigator from './AppNavigator';
 
 const App = () => {
