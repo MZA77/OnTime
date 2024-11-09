@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Patform, ScrollView } from 'react-native';
 import tw from 'twrnc';
-import { auth } from '../firebase'; // Adjust the path as necessary
+import { auth } from '../../firebase'; // Adjust the path as necessary
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 

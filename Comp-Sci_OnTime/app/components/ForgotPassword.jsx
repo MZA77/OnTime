@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import tw from 'twrnc';
-import { auth } from '../firebase'; // Adjust the path as necessary
+import { auth } from '../../firebase'; // Adjust the path as necessary
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 const ForgotPassword = ({ navigation }) => {

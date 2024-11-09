@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import tw from 'twrnc';
-import { auth } from '../firebase'; // Adjust the path as necessary
+import { auth } from '../../firebase'; // Adjust the path as necessary
 import { signOut } from 'firebase/auth';
 
 const Settings = ({ navigation }) => {

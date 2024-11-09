@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import tw from 'twrnc';
-import { auth, db } from '../firebase'; // Adjust the path as necessary
+import { auth, db } from '../../firebase'; // Adjust the path as necessary
 import { doc, getDoc } from 'firebase/firestore';
 
 const HomeScreen = ({ navigation }) => {
