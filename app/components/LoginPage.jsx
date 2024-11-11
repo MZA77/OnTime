@@ -4,7 +4,7 @@ import tw from 'twrnc';
 import { auth } from '../../firebase'; // Adjust the path as necessary
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { Clock3, Clock9 } from 'lucide-react-native';
+import { Clock3 } from 'lucide-react-native';
 
 
 const LoginPage = ({ navigation }) => {
@@ -41,8 +41,9 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={tw`flex-1 justify-start items-center bg-teal-500`}>
-      <Clock3 size={85} color={'white'} style={tw`mt-25`}/>
-      <Text style={tw`text-4xl mt-5 mb-15 font-bold text-slate-50`}>OnTime</Text>
+      <Clock3 size={85} style={tw`text-slate-50 mt-20`}/>
+      <Text style={tw`text-4xl mt-5 mb-2 font-bold text-slate-50`}>OnTime</Text>
+      <Text style={tw`text-lg mb-7 font-light text-slate-50`}>Stay on Track With your Assignments</Text>
       <View style={tw`bg-white p-6 mt-1 rounded-xl shadow-md w-80`}>
         {/* Email */}
         <View style={tw`mb-5`}>
