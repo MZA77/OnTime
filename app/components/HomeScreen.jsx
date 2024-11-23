@@ -4,16 +4,14 @@ import tw from 'twrnc';
 import { Clock, Bell, Sun, Moon, User, BookOpen, CheckCircle2, Calendar, Clock3, Settings } from 'lucide-react-native';
 import { auth, db } from '../../firebase'; // Adjust the path as necessary
 import { doc, getDoc } from 'firebase/firestore';
+import { useTheme } from '../../assets/ThemeContext'; // Adjust the path as necessary
 
 
 const HomeScreen = ({ navigation }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
   const [username, setUsername] = useState('');
 
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
 
   
 
@@ -35,26 +33,27 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={tw`flex-1 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <View style={tw`${darkMode ? 'bg-gray-800' : 'bg-white'} px-4 py-6 shadow-sm`}>
+      <View style={tw` px-4 py-1`}>
         <View style={tw`flex-row items-center justify-between`}>
           <View style={tw`flex-row items-center`}>
-            <Text style={tw`text-base font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}> Hi {username}👋</Text>
+            <Text style={tw`text-base ml-2 mt-9 font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Hi {username}👋</Text>
           </View>
-          <View style={tw`flex-row gap-4 items-center`}>
+          <View style={tw`flex-row gap-5 mt-9 mr-4 items-center`}>
             <User size={24} color={darkMode ? 'gray' : 'gray'} />
             <TouchableOpacity onPress={toggleDarkMode}>
               {darkMode ? <Sun size={24} color="white" /> : <Moon size={24} color="black" />}
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`absolute left-1/2.5 transform mt-4 flex-row items-center`}>
-          <Clock3 size={24} color="teal" style={tw`mr-2`} />
-          <Text style={tw`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>OnTime</Text>
+        <View style={tw`absolute left-1/2.35 mt-6 transform -translate-x-1/2 flex-col items-center`}>
+          <Clock3 size={28} color="teal" />
+          <Text style={tw`text-2xl mt-2 font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>OnTime</Text>
         </View>
       </View>
+      
 
       {/* Main Content - Scrollable */}
-      <ScrollView style={tw`flex-1 p-4 mt-4`}>
+      <ScrollView style={tw`flex-1 p-4 mt-10`}>
         {/* Quick Stats */}
         <View style={tw`flex-row justify-between mb-4`}>
           <View style={tw`flex-1 p-3 mr-2 flex-row items-center gap-3 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-lg`}>
