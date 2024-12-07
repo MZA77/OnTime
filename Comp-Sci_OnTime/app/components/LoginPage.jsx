@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Text, View, TextInput, TouchableOpacity, Alert, Animated, Easing, useColorScheme  } from 'react-native';
 import tw from 'twrnc';
 import { auth } from '../../firebase'; // Adjust the path as necessary
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { Clock3 } from 'lucide-react-native';
 
 
 const LoginPage = ({ navigation }) => {
@@ -37,16 +38,18 @@ const LoginPage = ({ navigation }) => {
     }
   };
 
+
   return (
-    <View style={tw`flex-1 justify-start items-center bg-gray-100`}>
-      <Text style={tw`text-4xl mt-25 mb-15 font-bold text-black`}>OnTime</Text>
-      <View style={tw`bg-white p-5 rounded-lg shadow-lg w-80`}>
-        <Text style={tw`text-center text-2xl text-gray-800 mb-5`}>Login</Text>
+    <View style={tw`flex-1 justify-start items-center bg-teal-500`}>
+      <Clock3 size={85} style={tw`text-slate-50 mt-20`}/>
+      <Text style={tw`text-4xl mt-5 mb-2 font-bold text-slate-50`}>OnTime</Text>
+      <Text style={tw`text-lg mb-7 text-slate-50`}>Stay on Track With your Assignments</Text>
+      <View style={tw`bg-white p-6 mt-1 rounded-xl shadow-md w-80`}>
         {/* Email */}
         <View style={tw`mb-5`}>
           <Text style={tw`text-gray-600 mb-2`}>Email</Text>
           <TextInput
-            style={tw`w-full p-2 border border-gray-300 rounded`}
+            style={tw`w-full p-3 border border-slate-200 rounded-lg bg-slate-50`}
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -56,34 +59,33 @@ const LoginPage = ({ navigation }) => {
         {/* Password */}
         <View style={tw`mb-5`}>
           <Text style={tw`text-gray-600 mb-2`}>Password</Text>
-          <TextInput
-            style={tw`w-full p-2 border border-gray-300 rounded`}
-            secureTextEntry={!showPassword} //this is a case which says that the password is definitely hidden
-            value={password}
-            onChangeText={setPassword} // this will allow the user to enter their password and save the values for handling
-          />
-          <TouchableOpacity onPress={togglePasswordVisibility}>           
-            <Text style={tw`text-blue-500  rounded ml-2 text-left mt-2`}>
-              {showPassword ? 'Hide' : 'Show'}     {/*this will allow the user to show or hide their password */}
-            </Text>
-          </TouchableOpacity>
+          <View style={tw`flex-row items-center`}>
+            <TextInput
+              style={tw`flex-1 p-3 border border-slate-200 rounded-lg bg-slate-50`}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Text style={tw`text-teal-500 ml-2 mt-2`}>
+                {showPassword ? 'Hide' : 'Show'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {/* Login Button */}
-        <TouchableOpacity style={tw`w-full p-3 bg-blue-500 rounded items-center mt-2 mb-3`} onPress={handleLogin}>
+        <TouchableOpacity style={tw`w-full p-4 bg-teal-500 rounded-lg items-center mb-2 mt-1`} onPress={handleLogin}>
           <Text style={tw`text-white text-lg font-bold`}>Login</Text>
         </TouchableOpacity>
         {/* Forgot Password Link */}
-        <TouchableOpacity style={tw`self-center`} onPress={() => navigation.navigate('ForgotPassword')}> 
-          <Text style={tw`p-1 text-blue-500 text-sm mb-1 text-center font-bold`}>Forgot Password?</Text>
+        <TouchableOpacity style={tw`ml-9`} onPress={() => navigation.navigate('ForgotPassword')}> 
+          <Text style={tw`flex-row p-1 text-teal-500 text-sm mt-2 font-bold`}>Forgot Password?</Text>
+        </TouchableOpacity>
+        {/* signnup */}
+        <TouchableOpacity style={tw`self-center`}> 
+            <Text style={tw`p-1 text-gray-950 text-sm mt-0 text-center`}>Don't have an account? <Text style={tw`text-teal-500 font-bold`} onPress={() => navigation.navigate('SignUp')}>SignUp</Text></Text>
         </TouchableOpacity>
       </View>
-      {/* Sign Up Button */}
-      <TouchableOpacity
-        style={tw`w-7/9 p-3 bg-white border border-blue-500 rounded items-center mt-2 shadow-sm`}
-        onPress={() => navigation.navigate('SignUp')}
-      >
-        <Text style={tw`text-blue-500 text-lg font-bold`}>Sign Up</Text>
-      </TouchableOpacity>
     </View>
   );
 };

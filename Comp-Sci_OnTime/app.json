@@ -23,12 +23,13 @@
       }
     },
     "web": {
-      "bundler": "metro",
+      "bundler": "webpack5",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

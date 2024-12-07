@@ -49,14 +49,14 @@ const SignUpPage = ({ navigation }) => {
   };
 
   return (
-    <View style={tw`flex-1 justify-center items-center bg-gray-100`}>
-      <View style={tw`bg-white p-5 rounded-lg shadow-lg w-80`}>
-        <Text style={tw`text-center text-2xl text-gray-800 mb-5`}>Sign Up</Text>
+    <View style={tw`flex-1 justify-start items-center bg-teal-500`}>
+      <Text style={tw`text-4xl mt-29 mb-5 font-bold text-slate-50`}>OnTime</Text>
+      <View style={tw`bg-white p-6 mt-1 rounded-xl shadow-md w-80`}>
         {/* Username */}
         <View style={tw`mb-5`}>
           <Text style={tw`text-gray-600 mb-2`}>Username</Text>
           <TextInput
-            style={tw`w-full p-2 border border-gray-300 rounded`}
+            style={tw`w-full p-3 border border-slate-200 rounded-lg bg-slate-50`}
             value={username}
             onChangeText={setUsername}
           />
@@ -65,7 +65,7 @@ const SignUpPage = ({ navigation }) => {
         <View style={tw`mb-5`}>
           <Text style={tw`text-gray-600 mb-2`}>Email</Text>
           <TextInput
-            style={tw`w-full p-2 border border-gray-300 rounded`}
+            style={tw`w-full p-3 border border-slate-200 rounded-lg bg-slate-50`}
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -76,7 +76,7 @@ const SignUpPage = ({ navigation }) => {
         <View style={tw`mb-5`}>
           <Text style={tw`text-gray-600 mb-2`}>Verify Email</Text>
           <TextInput
-            style={tw`w-full p-2 border border-gray-300 rounded`}
+            style={tw`w-full p-3 border border-slate-200 rounded-lg bg-slate-50`}
             keyboardType="email-address"
             autoCapitalize="none"
             value={verifyEmail}
@@ -86,30 +86,31 @@ const SignUpPage = ({ navigation }) => {
         {/* Password */}
         <View style={tw`mb-5`}>
           <Text style={tw`text-gray-600 mb-2`}>Password</Text>
-          <TextInput
-            style={tw`w-full p-2 border border-gray-300 rounded`}
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity onPress={togglePasswordVisibility}>           
-            <Text style={tw`text-blue-500  rounded ml-2 text-left mt-2`}>
-              {showPassword ? 'Hide' : 'Show'}     {/*this will allow the user to show or hide their password */}
-            </Text>
-          </TouchableOpacity>
+          <View style={tw`flex-row items-center`}>
+            <TextInput
+              style={tw`flex-1 p-3 border border-slate-200 rounded-lg bg-slate-50`}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Text style={tw`text-teal-500 ml-2 mt-2`}>
+                {showPassword ? 'Hide' : 'Show'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {/* Sign Up Button */}
-        <TouchableOpacity style={tw`w-full p-3 bg-blue-500 rounded items-center mt-2 mb-3`} onPress={handleSignUp}>
+        <TouchableOpacity style={tw`w-full p-4 bg-teal-500 rounded-lg items-center mb-2 mt-1`} onPress={handleSignUp}>
           <Text style={tw`text-white text-lg font-bold`}>Sign Up</Text>
         </TouchableOpacity>
+        {/* Back to Login Link */}
+        <TouchableOpacity style={tw`self-center`}>
+          <Text style={tw`p-1 text-black-500 text-sm mt-0 text-center`}>
+            Already have an account? <Text style={tw`text-teal-500 font-bold`} onPress={() => navigation.navigate('Login')}>Login</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
-      {/* Back to Login Button */}
-      <TouchableOpacity
-        style={tw`w-7/9 p-3 bg-white border border-blue-500 rounded items-center mt-2 shadow-sm`}
-        onPress={() => navigation.navigate('Login')}
-      >
-        <Text style={tw`text-blue-500 text-lg font-bold`}>Back to Login</Text>
-      </TouchableOpacity>
     </View>
   );
 };
