@@ -104,7 +104,7 @@ const SignUpPage = ({ navigation }) => {
         <TouchableOpacity style={tw`w-full p-4 bg-teal-500 rounded-lg items-center mb-2 mt-1`} onPress={handleSignUp}>
           <Text style={tw`text-white text-lg font-bold`}>Sign Up</Text>
         </TouchableOpacity>
-        {/* Back to Login Link */}
+        {/* Back to Login Link dfd*/} 
         <TouchableOpacity style={tw`self-center`}>
           <Text style={tw`p-1 text-black-500 text-sm mt-0 text-center`}>
             Already have an account? <Text style={tw`text-teal-500 font-bold`} onPress={() => navigation.navigate('Login')}>Login</Text>

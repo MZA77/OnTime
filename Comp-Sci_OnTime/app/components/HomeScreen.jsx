@@ -76,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Navigation Cards */}
+        {/* Navigation Carddfds */}
         <View style={tw`flex-row flex-wrap justify-between mt-3`}>
           {/* Homework Card */}
           <TouchableOpacity
