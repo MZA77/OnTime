@@ -28,6 +28,7 @@
       }
     },
     "web": {
+      "assetprefix": "./",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
