@@ -6,6 +6,11 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "OnTime",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -23,8 +28,6 @@
       }
     },
     "web": {
-      "bundler": "webpack5",
-      "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
