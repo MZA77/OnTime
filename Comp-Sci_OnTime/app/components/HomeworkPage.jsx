@@ -96,19 +96,19 @@ const HomeworkPage = ({ navigation }) => {
             <ArrowLeft size={30} color={`${darkMode ? 'white' : 'black'}`} />
           </TouchableOpacity>
           <View style={tw`flex-row items-center`}>
-            <View style={tw`flex-col items-center ml-24`}>
+            <View style={tw`absolute inset-x-0 top-0 flex-col items-center`}>
               <BookOpen size={28} color="teal" />
               <Text style={tw`text-xl mt-2 font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Homework</Text>
             </View>
-            <TouchableOpacity
-              style={tw`ml-18 p-2 rounded-full`}
-              onPress={() => setShowModal(true)} // shows the popup to add homework
-            >
-              <PlusCircle size={35} color={`${darkMode ? 'white' : 'black'}`} />
-            </TouchableOpacity>
           </View>
           <View style={tw`w-8`} /> {/* Placeholder to balance the layout */}
         </View>
+        <TouchableOpacity
+          style={tw`absolute top-7 right-5 p-2 rounded-full`}
+          onPress={() => setShowModal(true)} // Show the modal
+        >
+          <PlusCircle size={35} color={`${darkMode ? 'white' : 'black'}`} />
+        </TouchableOpacity>
       </View>
 
       {/* Status Bar */}

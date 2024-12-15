@@ -11,10 +11,6 @@ const HomeScreen = ({ navigation }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const [username, setUsername] = useState('');
 
-
-
-  
-
   useEffect(() => {
     const fetchUsername = async () => {
       const user = auth.currentUser;
@@ -33,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={tw`flex-1 ${darkMode ? 'bg-gray-950' : 'bg-stone-50'}`}>
       {/* Header */}
-      <View style={tw` px-4 py-1`}>
+      <View style={tw`px-4 py-1`}>
         <View style={tw`flex-row items-center justify-between`}>
           <View style={tw`flex-row items-center`}>
             <Text style={tw`text-base ml-2 mt-9 font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Hi {username}👋</Text>
@@ -45,9 +41,9 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`absolute left-1/2.35 mt-6 transform -translate-x-1/2 flex-col items-center`}>
+        <View style={tw`absolute left-0.934/2 transform -translate-x-1/2 top-0 flex-col items-center mt-6 z-10 w-auto`}>
           <Clock3 size={28} color="teal" />
-          <Text style={tw`text-2xl mt-2 font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>OnTime</Text>
+          <Text style={tw`text-2xl  font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>OnTime</Text>
         </View>
       </View>
       
