@@ -4,7 +4,7 @@
     "slug": "OnTime",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Group 1.png",
     "scheme": "OnTime",
     "platforms": [
       "ios",
@@ -23,13 +23,13 @@
     "android": {
       "package": "com.ZiaAhmed.OnTime",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/Group 1.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "assetprefix": "./",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/Group 1.png"
     },
     "plugins": [
       "expo-router",
@@ -37,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "944d7fdc-9df9-4910-a702-735a883a7f37"
+      }
     }
   }
 }

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, Image } from 'react-native';
 import tw from 'twrnc';
 import { Clock, Bell, Sun, Moon, User, BookOpen, CheckCircle2, Calendar, Clock3, Settings } from 'lucide-react-native';
 import { auth, db } from '../../firebase'; // Adjust the path as necessary
 import { doc, getDoc } from 'firebase/firestore';
 import { useTheme } from '../../assets/ThemeContext'; // Adjust the path as necessary
 
+const lightModeClockIcon = require('../../assets/images/DMicon2.png');
+const darkModeClockIcon = require('../../assets/images/LMicon2.png');
 
 const HomeScreen = ({ navigation }) => {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -41,15 +43,15 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`absolute left-0.934/2 transform -translate-x-1/2 top-0 flex-col items-center mt-6 z-10 w-auto`}>
-          <Clock3 size={28} color="teal" />
+        <View style={tw`absolute inset-x-40 top-0 flex-col items-center mt-6`}>
+          <Image source={darkMode ? lightModeClockIcon : darkModeClockIcon} style={{ width: 28, height: 28 }} />
           <Text style={tw`text-2xl  font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>OnTime</Text>
         </View>
       </View>
       
 
       {/* Main Content - Scrollable */}
-      <ScrollView style={tw`flex-1 p-4 mt-10`}>
+      <ScrollView style={tw`flex-1 p-4 mt-10 overflow-y-scroll`}>
         {/* Quick Stats */}
         <View style={tw`flex-row justify-between mb-4`}>
           <View style={tw`flex-1 p-3 mr-2 flex-row items-center gap-3 ${darkMode ? 'bg-gray-900' : 'bg-white'} rounded-lg`}>
@@ -76,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={tw`flex-row flex-wrap justify-between mt-3`}>
           {/* Homework Card */}
           <TouchableOpacity
-            style={tw`w-[99%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
+            style={tw`w-full md:w-[48%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
             onPress={() => navigation.navigate('Homework')}
           >
             <View style={tw`flex-col items-center text-center`}>
@@ -90,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
 
           {/* Timetable Card */}
           <TouchableOpacity
-            style={tw`w-[99%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
+            style={tw`w-full md:w-[48%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
             onPress={() => navigation.navigate('Timetable')}
           >
             <View style={tw`flex-col items-center text-center`}>
@@ -104,7 +106,7 @@ const HomeScreen = ({ navigation }) => {
 
           {/* Calendar Card */}
           <TouchableOpacity
-            style={tw`w-[99%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
+            style={tw`w-full md:w-[48%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
             onPress={() => navigation.navigate('Calender')}
           >
             <View style={tw`flex-col items-center text-center`}>
@@ -118,7 +120,7 @@ const HomeScreen = ({ navigation }) => {
 
           {/* Settings Card */}
           <TouchableOpacity
-            style={tw`w-[99%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
+            style={tw`w-full md:w-[48%] p-4 mb-4 cursor-pointer border ${darkMode ? 'bg-gray-900 hover:bg-gray-750 active:bg-gray-700' : 'bg-white hover:bg-gray-50 active:bg-gray-100 border-gray-50'} rounded-lg`}
             onPress={() => navigation.navigate('Settings')}
           >
             <View style={tw`flex-col items-center text-center`}>

@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Alert, Animated, Easing, useColorScheme  } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, Animated, Easing, useColorScheme, Image  } from 'react-native';
 import tw from 'twrnc';
 import { auth } from '../../firebase'; // Adjust the path as necessary
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { Clock3 } from 'lucide-react-native';
+
+const customIcon = require('../../assets/images/trans_fav.png');
 
 
 const LoginPage = ({ navigation }) => {
@@ -41,8 +43,8 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={tw`flex-1 justify-start items-center bg-teal-500`}>
-      <Clock3 size={85} style={tw`text-slate-50 mt-20`}/>
-      <Text style={tw`text-4xl mt-5 mb-2 font-bold text-slate-50`}>OnTime</Text>
+      <Image source={customIcon} style={tw`w-25 h-25 mt-20`}/>
+      <Text style={tw`text-4xl mt-3 mb-2 font-bold text-slate-50`}>OnTime</Text>
       <Text style={tw`text-lg mb-7 text-slate-50`}>Stay on Track With your Assignments</Text>
       <View style={tw`bg-white p-6 mt-1 rounded-xl shadow-md w-80`}>
         {/* Email */}

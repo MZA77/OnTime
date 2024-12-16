@@ -90,7 +90,7 @@ const HomeworkPage = ({ navigation }) => {
   return (
     <View style={tw`flex-1 ${darkMode ? 'bg-gray-950' : 'bg-stone-50'}`}>
       {/* Header */}
-      <View style={tw`px-5 py-7`}>
+      <View style={tw`px-5 py-7 mb-7`}>
         <View style={tw`flex-row items-center justify-between`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <ArrowLeft size={30} color={`${darkMode ? 'white' : 'black'}`} />
@@ -112,7 +112,7 @@ const HomeworkPage = ({ navigation }) => {
       </View>
 
       {/* Status Bar */}
-      <View style={tw` p-4`}>
+      <View style={tw`p-4`}>
         {/* This is the number of active assignments */}
         <Text style={tw`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-800'} mb-3`}>
           {activeHomeworks.length} Active Assignments
