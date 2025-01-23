@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'react-native';
 import tw from 'twrnc';
 import { useTheme } from '../../assets/ThemeContext';
-import { ArrowLeft, BookOpen, Calendar, PlusCircle, XCircle } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, Calendar, PlusCircle, XCircle, Check } from 'lucide-react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { auth, db } from '../../firebase';
+import { getDocs, collection, addDoc, query, where, deleteDoc, doc } from 'firebase/firestore';
 
 const HomeworkPage = ({ navigation }) => {
   const { darkMode } = useTheme();
   const [activeFilter, setActiveFilter] = useState('all');
-  const [homeworks, setHomeworks] = useState([
-    { id: 1, subject: "Math", description: "Calculus Ch. 5", dueDate: "2024-11-25", priority: "high", completed: false, estimatedTime: 60 },
-    { id: 2, subject: "Physics", description: "Lab Report", dueDate: "2024-11-26", priority: "medium", completed: false, estimatedTime: 120 },
-    { id: 3, subject: "English", description: "Essay Draft", dueDate: "2024-11-28", priority: "low", completed: false, estimatedTime: 90 },
-    { id: 4, subject: "English", description: "Essay Draft", dueDate: "2024-11-28", priority: "low", completed: false, estimatedTime: 90 },
-  ]);
+  const [homeworks, setHomeworks] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newHomework, setNewHomework] = useState({ subject: '', description: '', dueDate: '', estimatedTime: '' });
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -72,12 +69,38 @@ const HomeworkPage = ({ navigation }) => {
     low: activeHomeworks.filter(hw => hw.priority === 'low').length
   };
 
+{/* This is the function to fetch the users assignments */}
+  useEffect(() => {
+    const fetchHomeworks = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const q = query(collection(db, 'homeworks'), where('userId', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+        const fetchedHomeworks = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setHomeworks(fetchedHomeworks);
+      }
+    };
+
+    fetchHomeworks();
+  }, []);
+
   {/* This is the function to add a new homework */}
-  const handleAddHomework = () => {
-    const priority = calculatePriority(newHomework.dueDate);
-    setHomeworks([...homeworks, { ...newHomework, id: homeworks.length + 1, priority, completed: false }]);
-    setShowModal(false);
-    setNewHomework({ subject: '', description: '', dueDate: '', estimatedTime: '' });
+  const handleAddHomework = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      const priority = calculatePriority(newHomework.dueDate);
+      const newHomeworkWithUser = { ...newHomework, userId: user.uid, priority };
+      const docRef = await addDoc(collection(db, 'homeworks'), newHomeworkWithUser);
+      setHomeworks([...homeworks, { id: docRef.id, ...newHomeworkWithUser }]);
+      setShowModal(false);
+      setNewHomework({ subject: '', description: '', dueDate: '', estimatedTime: '' });
+    }
+  };
+
+  {/* This is the function to delete an assignment */}
+  const handleDeleteHomework = async (id) => {
+    await deleteDoc(doc(db, 'homeworks', id));
+    setHomeworks(homeworks.filter(hw => hw.id !== id));
   };
 
   {/* This is the function to handle the date change */}
@@ -92,11 +115,11 @@ const HomeworkPage = ({ navigation }) => {
       {/* Header */}
       <View style={tw`px-5 py-7 mb-7`}>
         <View style={tw`flex-row items-center justify-between`}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={tw`mt-3`}>
             <ArrowLeft size={30} color={`${darkMode ? 'white' : 'black'}`} />
           </TouchableOpacity>
           <View style={tw`flex-row items-center`}>
-            <View style={tw`absolute inset-x-0 top-0 flex-col items-center`}>
+            <View style={tw`absolute inset-x-0 top-0 flex-col mt--1.5 items-center`}>
               <BookOpen size={28} color="teal" />
               <Text style={tw`text-xl mt-2 font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Homework</Text>
             </View>
@@ -163,6 +186,11 @@ const HomeworkPage = ({ navigation }) => {
                 <Text style={tw`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-900'}`}>Due in <Text style={tw`font-semibold`}>{calculatedaysRemaining(homework.dueDate)} days</Text></Text>
               </View>
               <Text style={tw`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-900'}`}>ET: {homework.estimatedTime} mins</Text>
+              <View style={tw`absolute inset-y-0 right-4 flex-row items-center`}>
+                <TouchableOpacity onPress={() => handleDeleteHomework(homework.id)} style={tw`ml-4`}>
+                    <Check size={24} color={`${darkMode ? 'white' : 'black'}`} />
+                </TouchableOpacity>
+              </View>
             </View>
           ))}
         </View>

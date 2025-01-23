@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, Image } from 'react-native';
 import tw from 'twrnc';
+import { useFocusEffect } from '@react-navigation/native';
 import { Clock, Bell, Sun, Moon, User, BookOpen, CheckCircle2, Calendar, Clock3, Settings } from 'lucide-react-native';
 import { auth, db } from '../../firebase'; // Adjust the path as necessary
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDocs, getDoc, query, where, collection } from 'firebase/firestore';
 import { useTheme } from '../../assets/ThemeContext'; // Adjust the path as necessary
 
 const lightModeClockIcon = require('../../assets/images/DMicon2.png');
@@ -12,21 +13,35 @@ const darkModeClockIcon = require('../../assets/images/LMicon2.png');
 const HomeScreen = ({ navigation }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const [username, setUsername] = useState('');
+  const [activeHomeworkCount, setActiveHomeworkCount] = useState(0);
 
-  useEffect(() => {
-    const fetchUsername = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const username = userDoc.data().username;
-          setUsername(username);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUsername = async () => {
+        const user = auth.currentUser;
+        if (user) {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const username = userDoc.data().username;
+            setUsername(username);
+          }
         }
-      }
-    };
+      };
 
-    fetchUsername();
-  }, []);
+      const fetchActiveHomeworks = async () => {
+        const user = auth.currentUser;
+        if (user) {
+          const q = query(collection(db, 'homeworks'), where('userId', '==', user.uid));
+          const querySnapshot = await getDocs(q);
+          console.log('Fetched homeworks:', querySnapshot.docs.map(doc => doc.data())); // Debugging line
+          setActiveHomeworkCount(querySnapshot.size);
+        }
+      };
+
+      fetchUsername();
+      fetchActiveHomeworks();
+    }, [])
+  );
 
   return (
     <SafeAreaView style={tw`flex-1 ${darkMode ? 'bg-gray-950' : 'bg-stone-50'}`}>
@@ -43,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`absolute inset-x-40 top-0 flex-col items-center mt-6`}>
+        <View style={tw`absolute inset-x-20 top-0 flex-col items-center mt-6`}>
           <Image source={darkMode ? lightModeClockIcon : darkModeClockIcon} style={{ width: 28, height: 28 }} />
           <Text style={tw`text-2xl  font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>OnTime</Text>
         </View>
@@ -60,7 +75,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <View>
               <Text style={tw`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Due Soon</Text>
-              <Text style={tw`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}># Tasks</Text>
+              <Text style={tw`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{activeHomeworkCount} Tasks</Text>
             </View>
           </View>
           <View style={tw`flex-1 p-3 ml-2 flex-row items-center gap-3 ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white'} rounded-lg`}>
