@@ -22,7 +22,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Homework" component={HomeworkPage} options={{ headerShown: false }} />
         <Stack.Screen name="Calender" component={CalenderPage} />
-        <Stack.Screen name="Timetable" component={TimetablePage} />
+        <Stack.Screen name="Timetable" component={TimetablePage} options={{ headerShown: false }} />
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>

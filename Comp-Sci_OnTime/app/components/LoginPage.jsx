@@ -1,10 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, Alert, Animated, Easing, useColorScheme, Image  } from 'react-native';
 import tw from 'twrnc';
 import { auth } from '../../firebase'; // Adjust the path as necessary
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { Clock3 } from 'lucide-react-native';
+import * as AuthSession from 'expo-auth-session';
+
+
+
 
 const customIcon = require('../../assets/images/trans_fav.png');
 
@@ -13,6 +17,16 @@ const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+
+  useEffect(() => {
+    // Generate the redirect URI
+    const redirectUri = AuthSession.makeRedirectUri({
+      useProxy: true, // Ensures compatibility with Expo
+    });
+
+    console.log("Generated Redirect URI:", redirectUri);
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

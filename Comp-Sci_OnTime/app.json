@@ -2,10 +2,11 @@
   "expo": {
     "name": "OnTime",
     "slug": "OnTime",
+    "owner": "zazadev",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Group 1.png",
-    "scheme": "OnTime",
+    "scheme": "com.ZiaAhmed.OnTime",
     "platforms": [
       "ios",
       "android",
@@ -45,6 +46,7 @@
       "eas": {
         "projectId": "944d7fdc-9df9-4910-a702-735a883a7f37"
       }
-    }
+    },
+    "newArchEnabled": true
   }
 }

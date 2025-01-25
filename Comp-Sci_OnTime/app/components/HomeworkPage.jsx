@@ -173,7 +173,7 @@ const HomeworkPage = ({ navigation }) => {
               <Text style={tw`text-xl mt-2 font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Homework</Text>
             </View>
           </View>
-          <View style={tw`w-8`} /> {/* Placeholder to balance the layout */}
+          <View style={tw`w-8`} />
         </View>
         <TouchableOpacity
           style={tw`absolute top-7 right-5 p-2 rounded-full`}
