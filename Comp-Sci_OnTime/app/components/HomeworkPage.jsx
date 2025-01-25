@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'react-native';
 import tw from 'twrnc';
 import { useTheme } from '../../assets/ThemeContext';
 import { ArrowLeft, BookOpen, Calendar, PlusCircle, XCircle, Check } from 'lucide-react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { auth, db } from '../../firebase';
-import { getDocs, collection, addDoc, query, where, deleteDoc, doc } from 'firebase/firestore';
+import { getDocs, collection, addDoc, query, where, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const HomeworkPage = ({ navigation }) => {
   const { darkMode } = useTheme();
@@ -14,6 +16,7 @@ const HomeworkPage = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const [newHomework, setNewHomework] = useState({ subject: '', description: '', dueDate: '', estimatedTime: '' });
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [expandedHomeworkId, setExpandedHomeworkId] = useState(null);
 
   {/* This is the priority configuration for the assignments */}
   const priorityConfig = {
@@ -32,12 +35,26 @@ const HomeworkPage = ({ navigation }) => {
   };
 
 
+  const truncateDescription = (description) => {
+    if (description.length > 32) {
+      return description.substring(0, 32) + '...';
+    }
+    return description;
+  };
+
   const calculatedaysRemaining = (dueDate) => {
     const currentDate = new Date();
     const dueDateObj = new Date(dueDate);
     const timeDiff = dueDateObj - currentDate;
     const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    return daysRemaining;
+    
+    if (daysRemaining === 0) {
+      return 'Today';
+    } else if (daysRemaining === 1) {
+      return 'Tomorrow';
+    } else {
+      return 'in ' + daysRemaining + ' days';
+    }
   };
 
   {/* This is the function to calculate the priority based on the due date */}
@@ -110,6 +127,38 @@ const HomeworkPage = ({ navigation }) => {
     setNewHomework({ ...newHomework, dueDate: currentDate.toISOString().split('T')[0] });
   };
 
+  {/* This is the function to fetch the users assignments and recalculates the priority so the priority will change for different days */}
+  useFocusEffect(
+    useCallback(() => {
+      const fetchHomeworks = async () => {
+        const user = auth.currentUser;
+        if (user) {
+          const q = query(collection(db, 'homeworks'), where('userId', '==', user.uid));
+          const querySnapshot = await getDocs(q);
+          const fetchedHomeworks = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+          // Recalculate priorities and update state
+          const updatedHomeworks = await Promise.all(fetchedHomeworks.map(async (homework) => {
+            const priority = calculatePriority(homework.dueDate);
+            if (homework.priority !== priority) {
+              await updateDoc(doc(db, 'homeworks', homework.id), { priority });
+              return { ...homework, priority };
+            }
+            return homework;
+          }));
+
+          setHomeworks(updatedHomeworks);
+        }
+      };
+
+      fetchHomeworks();
+    }, [])
+  );
+
+  const handleCardPress = (id) => {
+    setExpandedHomeworkId(expandedHomeworkId === id ? null : id);
+  };
+
   return (
     <View style={tw`flex-1 ${darkMode ? 'bg-gray-950' : 'bg-stone-50'}`}>
       {/* Header */}
@@ -137,9 +186,7 @@ const HomeworkPage = ({ navigation }) => {
       {/* Status Bar */}
       <View style={tw`p-4`}>
         {/* This is the number of active assignments */}
-        <Text style={tw`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-800'} mb-3`}>
-          {activeHomeworks.length} Active Assignments
-        </Text>
+        <Text style={tw`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-800'} mb-3`}>{activeHomeworks.length} Active Assignments</Text>
         {/* This is the filter for the assignments */}
         <View style={tw`flex-row gap-2`}>
           <TouchableOpacity
@@ -176,22 +223,27 @@ const HomeworkPage = ({ navigation }) => {
         <View style={tw`mb-4`}>
           {/* Athis is the formatting for the assignments and how they will look */}
           {filteredHomeworks.map((homework) => (
-            <View
-              key={homework.id}
-              style={tw`mt-3 p-4 ${darkMode ? 'bg-gray-900' : 'bg-white'} rounded-lg border-l-4 border-${priorityConfig[homework.priority].color}-500`}
-            >
-              <View>
-                <Text style={tw`text-base font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-900'}`}>{homework.subject}</Text>
-                <Text style={tw`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-900'}`}>{homework.description}</Text>
-                <Text style={tw`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-900'}`}>Due in <Text style={tw`font-semibold`}>{calculatedaysRemaining(homework.dueDate)} days</Text></Text>
+            <TouchableOpacity key={homework.id} onPress={() => handleCardPress(homework.id)}>
+              <View
+                key={homework.id}
+                style={tw`mt-3 p-4 ${darkMode ? 'bg-gray-900' : 'bg-white'} rounded-lg border-l-4 border-${priorityConfig[homework.priority].color}-500`}
+              >
+                <View>
+                  <Text style={tw`text-base font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>{homework.subject}</Text>
+                  <View style={tw`max-w-[90%] mt-1 mb-1`}>
+                    <Text style={tw`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-700'}`}>
+                    {expandedHomeworkId === homework.id ? homework.description : truncateDescription(homework.description)}</Text>
+                  </View>
+                  <Text style={tw`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-900'}`}>Due <Text style={tw`font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-900'}`}>{calculatedaysRemaining(homework.dueDate)}</Text></Text>
+                </View>
+                <Text style={tw`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-900'}`}>ET: {homework.estimatedTime} mins</Text>
+                <View style={tw`absolute inset-y-0 right-4 flex-row items-center`}>
+                  <TouchableOpacity onPress={() => handleDeleteHomework(homework.id)} style={tw`ml-4 `}>
+                      <Check size={24} color={`${darkMode ? 'white' : 'black'}`} />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <Text style={tw`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-900'}`}>ET: {homework.estimatedTime} mins</Text>
-              <View style={tw`absolute inset-y-0 right-4 flex-row items-center`}>
-                <TouchableOpacity onPress={() => handleDeleteHomework(homework.id)} style={tw`ml-4`}>
-                    <Check size={24} color={`${darkMode ? 'white' : 'black'}`} />
-                </TouchableOpacity>
-              </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>

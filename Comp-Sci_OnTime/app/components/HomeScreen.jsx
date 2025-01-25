@@ -13,7 +13,7 @@ const darkModeClockIcon = require('../../assets/images/LMicon2.png');
 const HomeScreen = ({ navigation }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const [username, setUsername] = useState('');
-  const [activeHomeworkCount, setActiveHomeworkCount] = useState(0);
+  const [highPriorityHomeworkCount, setHighPriorityHomeworkCount] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -28,18 +28,18 @@ const HomeScreen = ({ navigation }) => {
         }
       };
 
-      const fetchActiveHomeworks = async () => {
+      const fetchHighPriorityHomeworks = async () => {
         const user = auth.currentUser;
         if (user) {
-          const q = query(collection(db, 'homeworks'), where('userId', '==', user.uid));
+          const q = query(collection(db, 'homeworks'), where('userId', '==', user.uid), where('priority', '==', 'high'));
           const querySnapshot = await getDocs(q);
-          console.log('Fetched homeworks:', querySnapshot.docs.map(doc => doc.data())); // Debugging line
-          setActiveHomeworkCount(querySnapshot.size);
+          console.log('Fetched high priority homeworks:', querySnapshot.docs.map(doc => doc.data())); // Debugging line
+          setHighPriorityHomeworkCount(querySnapshot.size);
         }
       };
 
       fetchUsername();
-      fetchActiveHomeworks();
+      fetchHighPriorityHomeworks();
     }, [])
   );
 
@@ -75,7 +75,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <View>
               <Text style={tw`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Due Soon</Text>
-              <Text style={tw`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{activeHomeworkCount} Tasks</Text>
+              <Text style={tw`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{highPriorityHomeworkCount} Tasks</Text>
             </View>
           </View>
           <View style={tw`flex-1 p-3 ml-2 flex-row items-center gap-3 ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white'} rounded-lg`}>
